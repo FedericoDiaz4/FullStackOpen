@@ -3,9 +3,10 @@ import { useState } from "react";
 const DisplayTitles = ({ text }) => <h1>{text}</h1>;
 
 const DisplayValues = ({ text, value }) => (
-  <p>
-    {text}: {value}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 const Button = ({ handleClick, text }) => (
@@ -14,14 +15,16 @@ const Button = ({ handleClick, text }) => (
 
 const Statistics = ({ good, neutral, bad, all, average }) => {
   return (
-    <>
-      <DisplayValues text="Good" value={good} />
-      <DisplayValues text="Neutral" value={neutral} />
-      <DisplayValues text="Bad" value={bad} />
-      <DisplayValues text="All" value={all} />
-      <DisplayValues text="average" value={average / all} />
-      <DisplayValues text="positive" value={(good / all) * 100 + "%"} />
-    </>
+    <table border={3}>
+      <tbody>
+        <DisplayValues text="Good" value={good} />
+        <DisplayValues text="Neutral" value={neutral} />
+        <DisplayValues text="Bad" value={bad} />
+        <DisplayValues text="All" value={all} />
+        <DisplayValues text="average" value={average / all} />
+        <DisplayValues text="positive" value={(good / all) * 100 + "%"} />
+      </tbody>
+    </table>
   );
 };
 
@@ -56,7 +59,6 @@ const App = () => {
       <Button handleClick={handleClickNeutral} text={"Neutral"} />
       <Button handleClick={handleClickBad} text={"Bad"} />
       <DisplayTitles text={"Statistics"} />
-      {console.log(all)}
       {all > 0 ? (
         <Statistics
           good={good}
