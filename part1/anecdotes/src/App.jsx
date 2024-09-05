@@ -4,6 +4,8 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
+const Titles = ({ text }) => <h1>{text}</h1>;
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -18,6 +20,7 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  const [maxVotes, setMaxVotes] = useState(0);
 
   const handleClickNext = () => {
     setSelected(Math.floor(Math.random() * 8));
@@ -27,14 +30,27 @@ const App = () => {
     const newVotes = [...votes];
     newVotes[selected] += 1;
     setVotes(newVotes);
+    setMaxVotes(GetAnecdoteWithMoreVotes(newVotes));
+  };
+
+  const GetAnecdoteWithMoreVotes = (arrayVotes) => {
+    return arrayVotes.reduce(
+      (maxIndex, value, currentIndex, arr) =>
+        value > arr[maxIndex] ? currentIndex : maxIndex,
+      0
+    );
   };
 
   return (
     <>
-      <div>{anecdotes[selected]}</div>
-      <div>Has {votes[selected]} votes</div>
+      <Titles text={"Anecdote of the day."} />
+      <p>{anecdotes[selected]}</p>
+      <p>Has {votes[selected]} votes</p>
       <Button handleClick={handleClickNext} text={"next anecdote"} />
-      <Button handleClick={handleClickVote} text="Vote!" />
+      <Button handleClick={handleClickVote} text="Vote!" />´
+      <Titles text={"Anecdote with most votes"} />
+      <p>{anecdotes[maxVotes]}</p>
+      <p>has {votes[maxVotes]} votes</p>
     </>
   );
 };
