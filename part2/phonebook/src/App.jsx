@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -18,7 +21,13 @@ const App = () => {
       alert(`${newName} is already added to phonebook`);
       return;
     }
-    setPersons(persons.concat({ name: newName, number: newNumber }));
+    setPersons(
+      persons.concat({
+        id: persons.length + 1,
+        name: newName,
+        number: newNumber,
+      })
+    );
     setNewName("");
     setNewNumber("");
   };
@@ -51,37 +60,21 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with <input value={search} onChange={handleSearch} />
+      <Filter search={search} handleSearch={handleSearch} />
       <h2>add a new</h2>
-      <form onSubmit={addNewPerson}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        addNewPerson={addNewPerson}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        newName={newName}
+        newNumber={newNumber}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {search !== ""
-          ? personsFiltered.map((person) => {
-              return (
-                <li key={person.id}>
-                  {person.name} - {person.number}
-                </li>
-              );
-            })
-          : persons.map((person) => {
-              return (
-                <li key={person.id}>
-                  {person.name} - {person.number}
-                </li>
-              );
-            })}
-      </ul>
+      <Persons
+        search={search}
+        personsFiltered={personsFiltered}
+        persons={persons}
+      />
     </div>
   );
 };
